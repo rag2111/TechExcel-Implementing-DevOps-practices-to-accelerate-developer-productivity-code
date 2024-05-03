@@ -3,11 +3,7 @@
 
 name: .NET
 
-env:
-  registryName: vd5z4hnl7uho2mpnpreg.azurecr.io
-  repositoryName: techexcel/mydotnetapp
-  dockerFilePath: ./Application/src/RazorPagesTestSample
-  tag: ${{github.run_number}}
+
 
 on:
   push:
@@ -17,7 +13,20 @@ on:
     branches: [ "main" ]
     paths: Application/**
   workflow_dispatch:
+    inputs:
+      targetEnv:
+        description: 'Target environment'
+        required: true
+        default: 'dev'
   
+env:
+  registryName: vd5z4hnl7uho2mpnpreg.azurecr.io
+  repositoryName: techexcel/mydotnetapp
+  dockerFilePath: ./Application/src/RazorPagesTestSample
+  tag: ${{github.run_number}}
+  appPrefix: vd5z4hnl7uho2
+  targetEnv: ${{ github.event.inputs.targetEnv }}
+
 jobs:
   build:
 
@@ -55,3 +64,22 @@ jobs:
     - name: Docker Push
       run: docker push $registryName/$repositoryName:$tag
 
+  deploy-to-dev:
+    if: $targetEnv == 'dev'
+  
+    runs-on: ubuntu-latest
+    needs: docker-build-push
+    environment:
+      name: dev
+      url: https://${{env.appPrefix}}-dev.azurewebsites.net/
+    
+    steps:
+      - name: 'Login via Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - uses: azure/webapps-deploy@v2
+        with:
+          app-name: '${{env.appPrefix}}-dev'
+          images: ${{env.registryName}}.azurecr.io/${{env.repositoryName}}:${{github.run_number}}
