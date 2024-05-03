@@ -65,7 +65,7 @@ jobs:
       run: docker push $registryName/$repositoryName:$tag
 
   deploy-to-env:
-    if: ${{ env.targetEnv }} == 'dev'
+    if: $targetEnv == 'dev'
   
     runs-on: ubuntu-latest
     needs: docker-build-push
