@@ -1,0 +1,7 @@
+version: v0.1
+testName: rag-loadtesting
+testPlan: LoadTestScript.jmx
+description: 'Load Testing'
+engineInstances: 1
+failureCriteria:
+  - percentage(error) > 10
