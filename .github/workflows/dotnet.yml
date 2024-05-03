@@ -24,8 +24,6 @@ env:
   repositoryName: techexcel/mydotnetapp
   dockerFilePath: ./Application/src/RazorPagesTestSample
   tag: ${{github.run_number}}
-  appPrefix: vd5z4hnl7uho2
-  targetEnv: ${{ github.event.inputs.targetEnv }}
 
 jobs:
   build:
@@ -64,13 +62,13 @@ jobs:
     - name: Docker Push
       run: docker push $registryName/$repositoryName:$tag
 
-  deploy-to-env:
+  deploy-to-dev:
   
     runs-on: ubuntu-latest
     needs: docker-build-push
     environment:
-      name: ${{ env.targetEnv }}
-      url: https://${{env.appPrefix}}-${{env.appPrefix}}.azurewebsites.net/
+      name: dev
+      url: https://vd5z4hnl7uho2-dev.azurewebsites.net/
     
     steps:
       - name: 'Login via Azure CLI'
@@ -78,4 +76,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - uses: azure/webapps-deploy@v2
+        with:
+          app-name: 'vd5z4hnl7uho2-dev'
+          images: $registryName.azurecr.io/$env.repositoryName:$github.run_number
 
