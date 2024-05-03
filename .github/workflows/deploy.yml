@@ -13,6 +13,10 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+        permissions:
+          contents: read
+          pages: write
+          id-token: write
 
       - name: Set up Azure CLI
         uses: azure/login@v1
