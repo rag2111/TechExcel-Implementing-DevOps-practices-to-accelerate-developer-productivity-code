@@ -34,4 +34,4 @@ jobs:
 
       - name: Build and deploy Bicep
         run: |
-          az deployment group create --resource-group ${{ secrets.AZURE_RG }} --template-file main.bicep --parameters targetEnv=${{ env.targetEnv }}
+          az deployment group create --resource-group ${{ secrets.AZURE_RG }} --template-file InfrastructureAsCode/main.bicep --parameters targetEnv=${{ env.targetEnv }}
