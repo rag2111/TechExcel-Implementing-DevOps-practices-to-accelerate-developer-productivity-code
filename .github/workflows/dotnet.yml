@@ -49,10 +49,9 @@ jobs:
         registry: ${{ secrets.ACR_SERVER }}
         username: ${{ secrets.ACR_USERNAME }}
         password: ${{ secrets.ACR_PASSWORD }}
-    - name: Build and Push Docker image
-      uses: docker/build-push-action@v2
-      with:
-      context: ${{ env.dockerFilePath }}
-      dockerfile: ${{ env.dockerFilePath }}/Dockerfile
-      push: true
-      tags: ${{ env.registryName }}/${{ env.repositoryName }}:${{ env.tag }}
+    - name: Docker Build
+      run: docker build -t $registryName/$repositoryName:$tag --build-arg build_version=$tag $dockerFilePath
+      
+    - name: Docker Push
+      run: docker push $registryName/$repositoryName:$tag
+
