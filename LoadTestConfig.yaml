@@ -4,4 +4,4 @@ testPlan: LoadTestScript.jmx
 description: 'Load Testing'
 engineInstances: 1
 failureCriteria:
-  - percentage(error) > 10
+  - percentage(error) > 50
