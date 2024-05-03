@@ -70,6 +70,9 @@ resource containerRegistry 'Microsoft.ContainerRegistry/registries@2021-06-01-pr
   sku: {
     name: registrySku
   }
+  properties: {
+    adminUserEnabled: true
+  }
 }
 
 output applicationUrl string = webApp.properties.defaultHostName

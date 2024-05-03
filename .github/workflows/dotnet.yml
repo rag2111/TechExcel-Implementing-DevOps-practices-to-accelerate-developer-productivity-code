@@ -3,6 +3,12 @@
 
 name: .NET
 
+env:
+  registryName: vd5z4hnl7uho2mpnpreg.azurecr.io
+  repositoryName: techboost/dotnetcoreapp
+  dockerFilePath: ./Application/src/RazorPagesTestSample
+  tag: ${{github.run_number}}
+
 on:
   push:
     branches: [ "main" ]
@@ -29,3 +35,24 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
+
+  docker-build-push:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Login to Container Registry
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ secrets.ACR_SERVER }}
+        username: ${{ secrets.ACR_USERNAME }}
+        password: ${{ secrets.ACR_PASSWORD }}
+    - name: Build and Push Docker image
+      uses: docker/build-push-action@v2
+      with:
+      context: .
+      dockerfile: ${{ env.dockerFilePath }}/Dockerfile
+      push: true
+      tags: ${{ env.registryName }}/${{ env.repositoryName }}:${{ env.tag }}
