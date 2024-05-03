@@ -33,7 +33,7 @@ resource webApp 'Microsoft.Web/sites@2021-02-01' = {
       appSettings: [
         {
           name: 'APPINSIGHTS_INSTRUMENTATIONKEY'
-          value: appInsights.properties.instrumentationKey
+          value: appInsights.properties.InstrumentationKey
         }
       ]
     }
