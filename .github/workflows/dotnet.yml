@@ -70,8 +70,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: docker-build-push
     environment:
-      name: ${{ env.targetEnv }}
-      url: https://${{env.appPrefix}}-${{env.targetEnv}}.azurewebsites.net/
+      name: $targetEnv
+      url: https://$appPrefix-$targetEnv.azurewebsites.net/
     
     steps:
       - name: 'Login via Azure CLI'
@@ -82,4 +82,4 @@ jobs:
       - uses: azure/webapps-deploy@v2
         with:
           app-name: '${{env.appPrefix}}-${{env.targetEnv}}'
-          images: ${{env.registryName}}.azurecr.io/${{env.repositoryName}}:${{github.run_number}}
+          images: $registryName.azurecr.io/$env.repositoryName:$github.run_number
