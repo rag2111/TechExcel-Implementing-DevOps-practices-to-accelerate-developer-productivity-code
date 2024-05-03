@@ -5,7 +5,7 @@ name: .NET
 
 env:
   registryName: vd5z4hnl7uho2mpnpreg.azurecr.io
-  repositoryName: techboost/dotnetcoreapp
+  repositoryName: techexcel/mydotnetapp
   dockerFilePath: ./Application/src/RazorPagesTestSample
   tag: ${{github.run_number}}
 
