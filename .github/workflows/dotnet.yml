@@ -65,12 +65,12 @@ jobs:
       run: docker push $registryName/$repositoryName:$tag
 
   deploy-to-env:
-    if: $targetEnv == 'dev'
+    if: ${{ env.targetEnv }} == 'dev'
   
     runs-on: ubuntu-latest
     needs: docker-build-push
     environment:
-      name: $targetEnv
+      name: ${{ env.targetEnv }}
       url: https://${{env.appPrefix}}-${{env.targetEnv}}.azurewebsites.net/
     
     steps:
